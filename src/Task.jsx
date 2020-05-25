@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 
+import PersonSlider from './PersonSlider';
+
 // Цикл: 
 // new Task -> new AdvancedTask ->? new SimpleTask ->? new Task ....
 
@@ -50,10 +52,7 @@ class Task extends Component {
                         </div>
                     </div>
                 </div>
-                <div className='task__executor'>
-                    <img className="executor-icon" alt='Executor_Photo'/>
-                    <span className="executor-name">Executor</span> 
-                </div>
+                <PersonSlider persons={ this.state.executors }></PersonSlider>
             </div>
         )
     }
