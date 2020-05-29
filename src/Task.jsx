@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 
 import { getTenDays } from "./consts/anythings";
+import { getProperty } from './utils';
 
 import PersonSlider from './PersonSlider';
 import ProgressBar from "./ProgressBar";
@@ -31,39 +32,16 @@ class Task extends Component {
 
     render() {
         let { task } = this.state; 
-        let priority;
-        let priorityClass;
-
-        // TODO-ask: Можно ли это сделать более элегантно ?
-        switch(task.priority) {
-            case EPriority.Wish:
-                priority = 'wish';
-                break;
-            case EPriority.Low:
-                priority = 'low';
-                break;
-            case EPriority.Medium:
-                priority = 'medium';
-                break;
-            case EPriority.Important:
-                priority = 'important';
-                break;
-            case EPriority.Critical:
-                priority = 'crit';
-                break;
-            default:
-                priority = 'default';
-                console.error(`Err: Unknown priority (priority: ${task.priority})`);
-        }
-        priorityClass = `${ priority }-priority`; 
-
+        let priority = getProperty('priority', task.priority,
+            ['wish', 'low', 'medium', 'important', 'crit']
+        );
         return (
-            <div className='task'>
+            <div className='task' onClick={ this.openAdvancedTask }>
                 <div className='task__info'>
                     <div className='task__props'>
                         {/* TODO: Select Priority */}
-                        <span className={ priorityClass }>
-                            { priority }
+                        <span className={ priority.class }>
+                            { priority.title }
                         </span>
 
                         {/* TODO-advanced: Select Tags */}
@@ -118,7 +96,7 @@ class Task extends Component {
     // Только тогда, когда задача будет создана, произойдет запись в БД
     getFreeId = () => {
          
-    }
+    }  
 }
 
 export default Task;
