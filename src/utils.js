@@ -58,7 +58,47 @@ export function getProperty(propName, propValue, propTitles, propClasses) {
 export function printArrValues(arr) {
     console.debug('PRINT ARR VALUES - begin');
     for(let i = 0; i < arr.length; i++) {
-        console.log(`VALUE: ${arr[i]}`);
+        console.log(`Value: ${arr[i]}`);
     }
     console.debug('PRINT ARR VALUES - end');
+}
+
+// debug function
+export function printObjValues(obj) {
+    console.debug('PRINT OBJ VALUES - begin');
+    let keys = Object.keys(obj);
+
+    for(let i = 0; i < keys.length; i++) {
+        console.log(`Key: ${keys[i]}, Value: ${obj[keys[i]]}`);
+    }
+    console.debug('PRINT OBJ VALUES - end');
+}
+
+
+// Делает проверку числового параметра
+// return: true - проверка пройдена
+//         fasle - проверка НЕ пройдена  
+export function numberTest(name, value, from, throwErr = false) {
+    let msg;
+    let hasErr = false;
+
+    if(!value) {
+        msg = `Err: ${from} - ${name} does't exist`;
+    } else if(value <= -1) {
+        msg = `Err: ${from} - invalid ${name}`;
+    }
+
+    if (hasErr && throwErr) {
+        throw new Error(msg);
+    } else if(hasErr){
+        console.error(msg);
+        return false;
+    } 
+
+    return true;
+}
+
+export function getDays(milliseconds) {
+    // msInSec / secInMin / minInHour / hourInDay 
+    return Math.floor(milliseconds / 1000 / 60 / 60 / 24);
 }
