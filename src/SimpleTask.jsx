@@ -1,26 +1,30 @@
 import React, { Component } from "react";
 import { EStatus } from "./consts/enums";
+import { numberTest } from "./utils";
 
 // Служит для ображения простого пункта задачи
 // Можно будет создать задачу отображаемую в основном списке
 // props:
 //  taskId - по id задача будет получать для себя данные
-//  newTask - флаг создания новой задачи
-
 
 // TODO-tmp: SimpleTask data 
 // state = {
+//     id: ,
 //     title: '',
-//     status: 0
+//     status: EStatus.Await
 // }
 class SimpleTask extends Component {
     constructor(props) {
         super(props);
 
+        let testId = numberTest('taskId', props.taskId, 'SimpleTask.constructor');
+        console.debug(`SimpleTask.constructor - taskId: ${props.taskId}, testId: ${testId}`);
+
         this.state = {
-            simpleTask: (props.newTask) 
-            ? this.сreateNewTask(props.taskId)
-            : this.getSimpleTask(props.taskId),
+            simpleTask: (testId) 
+            ? this.getSimpleTask(props.taskId)
+            : this.createNewTask(),
+            newTask: testId 
         }
     }
 
@@ -36,6 +40,7 @@ class SimpleTask extends Component {
                     { title }
                 </label>
 
+                {/* Notice: status менять не планируется */}
                 <span className='sl-task__status'>
                     { status }
                 </span>
@@ -44,17 +49,32 @@ class SimpleTask extends Component {
     }
 
     //TODO: SimpleTask.getSimpleTask 
-    getSimpleTask = (taskId) => {
+    getSimpleTask = (id) => {
 
+        // tmp - test UI
+        return {
+            id: 0, 
+            title: 'Test simple Task',
+            status: EStatus.Await
+        } 
     } 
 
-    createNewTask = (taskId) => {
+    createNewTask = () => {
         return {
-            id: taskId, // поле необходимо для связи задачи с SimpleTask и AdvancedTask
-            title: '',
+            id: this.getFreeId(), // поле необходимо для связи задачи с SimpleTask и AdvancedTask
+            title: 'Write you task title here...',
             status: EStatus.Await
         };
     }
+
+    // TODO: SimpleTask.getFreeId
+    // Id должно резервироваться в отдельном хранилище,
+    // Только тогда, когда задача будет создана, произойдет запись в БД
+    getFreeId = () => {
+        // tmp - test UI
+        console.debug('SimpleTask.getFreeId - stub id');
+        return 1;
+    } 
 }
 
 export default SimpleTask;
