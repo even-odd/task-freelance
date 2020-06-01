@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 
-import { getTenDays } from "./consts/anythings";
-import { getProperty } from './utils';
+import { getProperty, getTenDays } from './utils';
 
 import PersonSlider from './PersonSlider';
 import ProgressBar from "./ProgressBar";
@@ -22,11 +21,12 @@ import { EProgressBar, EPriority, EStatus } from "./consts/enums";
 class Task extends Component {
     constructor(props) {
         super(props);
-        let testId = props.taskId != null;
+        let testId = props.taskId != null || props.taskId > -1;
+        console.debug(`Task.constructor - taskId: ${props.taskId}, testId: ${testId}`);
 
         this.state = {
-            task: (testId) ? this.getTask() : this.сreateNewTask(),
-            newTask: (testId) ? false : true
+            task: (testId) ? this.getTask(props.taskId) : this.сreateNewTask(),
+            newTask: !testId
         }
     }
 
@@ -36,7 +36,7 @@ class Task extends Component {
             ['wish', 'low', 'medium', 'important', 'crit']
         );
         return (
-            <div className='task' onClick={ this.openAdvancedTask }>
+            <div className='task' onClick={ () => this.openAdvancedTask(task.id) }>
                 <div className='task__info'>
                     <div className='task__props'>
                         {/* TODO: Select Priority */}
@@ -65,17 +65,37 @@ class Task extends Component {
             </div>
         )
     }
+    //TODO: Task.openAdvancedTask 
+    openAdvancedTask = (id) => {
+
+    }
 
     //TODO: Task.getTask 
-    getTask = () => {
+    getTask = (id) => {
         // получает данные с помощью dispatch и возвращает их
         // PS пока хз как dispatch передает нам данные
+        // tmp - stub
+        return {
+            id: id, // поле необходимо для связи задачи с SimpleTask и AdvancedTask
+            title: '',
+            status: EStatus.Await,
+            priority: EPriority.Wish,
+            executors: [],
+            tags: [],
+            timeBegin: Date.parse('2020-05-30'),
+            timeEnd: Date.parse('2020-06-05') // будет немного больше чем 10 дней (задержка при выполении + 10 дней от текущего времени)
+        };
     }
 
     //TODO: Task.saveTask 
     saveTask = () => {
         // dispatch(saveTask(this.state.task));
-        this.props.taskSaved();
+
+        if(this.props.taskSaved) {
+            this.props.taskSaved()
+        } else {
+            throw new Error("Err: Task.saveTask - parent funciton taskSaved, does'n exist");
+        };
     }
 
     сreateNewTask = () => {
@@ -86,8 +106,8 @@ class Task extends Component {
             priority: EPriority.Wish,
             executors: [],
             tags: [],
-            timeBegin: new Date(),
-            timeEnd: getTenDays(new Date()) // будет немного больше чем 10 дней (задержка при выполении + 10 дней от текущего времени)
+            timeBegin: Date.now(),
+            timeEnd: getTenDays(Date.now()) // будет немного больше чем 10 дней (задержка при выполении + 10 дней от текущего времени)
         };
     }
 
