@@ -1,0 +1,105 @@
+.task {
+    display: flex;
+    min-width: 278px;
+    margin: 10px 0;
+    padding: 8px 12px;
+    border: 2px solid black;
+    border-top-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.task__info {
+    width: 70%;
+    padding-right: 5px;
+    border-right: 2px dashed black;
+}
+
+.task__box {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task__props {
+    display: flex;
+}
+
+.task__property {
+    margin-right: 5px;
+    padding: 0 5px;
+    border-radius: 10%;
+}
+
+.task__btn-save {
+    
+}
+
+.task__priority-wish {
+    background-color: bisque;
+}
+.task__priority-low {
+    background-color: #62ecdf91;
+}
+.task__priority-medium {
+    color: white;
+    background-color: #39b073;
+}
+.task__priority-important {
+    background-color: #f24712d9;
+}
+.task__priority-crit {
+    color: white;
+    background-color: #c20000;
+}
+
+.task__status-await {
+    background-color: bisque;
+}
+
+.task__status-delaye {
+    background-color: #d46400;
+}
+
+.task__status-during {
+    color: white;
+    background-color: #005fd4;
+}
+
+.task__status-done {
+    color: white;
+    background-color: forestgreen;
+}
+
+
+.task__title {
+    padding: 5px 0;
+    border-bottom: 3px solid blueviolet;
+    margin: 5px 0;
+    font-size: 24px;
+    font-weight: bold;
+    word-break: break-word;
+}
+.task__title::before {
+    content: '#';
+    margin-right: 5px;
+}
+
+.task__box_doge {
+    display: flex;
+    justify-content: space-between;
+}
+
+.task__doge {
+    height: 40px;
+    width: 40px;
+}
+
+.task__executors {
+    display: flex;
+    /* min-width: 15%; */
+    margin: 2px auto;
+    padding: 5px 2px;
+    flex-flow: column;
+    justify-content: center;
+    align-items: center;
+}
+
