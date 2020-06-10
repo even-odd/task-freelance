@@ -1,0 +1,20 @@
+.taks__bar-progress {
+    background-color: brown; 
+}
+
+.taks__bar-timelimit {
+    background-color: red;
+}
+
+.task__bar-title {
+    margin: 0 auto;
+    font-weight: bold;
+}
+
+.title-progress {
+
+}
+
+.title-timelimit {
+
+}

@@ -1,26 +1,16 @@
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 
-import { EProgressBar, EStatus } from "./consts/enums";
+import { EProgressBar, EStatus } from "../../consts/enums";
 
-import { getDays } from './utils';
+import { getDays } from '../../utils';
 
-// TODO-ask: где вычислять состояние бара ? И как подписаться на изменения 
-// в передаваемую в компонет задачу
-
-// TODO-1 (ProgressBar): подписаться на изменения в задаче
-// TODO-2 (ProgressBar): попросить ревью у Павла
+// TODO-advanced: проверить как происходит рендер после изменения задачи
+// (для calcProgressValue) 
 
 // props:
 //  type - тип ProgressBar
 //  task - задача 
-class ProgressBar extends Component {
-
-    // TODO: ProgressBar.shouldComponentUpdate
-    shouldComponentUpdate() {
-        // сравнивать по времени и задачам,
-        // сравнения по типам вынести в отдельные функции 
-        return true;
-    }
+class ProgressBar extends PureComponent {
 
     render() {
         let { type } = this.props;
@@ -49,7 +39,6 @@ class ProgressBar extends Component {
     }
 
     // Вычисляет состояние бара в зависимости от типа
-    // @Log() 
     calcProgressValue = () => {
         let { task, type } = this.props;
         let range = {
@@ -92,22 +81,16 @@ class ProgressBar extends Component {
                 let tmpTaskList = [
                     {status: EStatus.Done},
                     {status: EStatus.Await},
-                    {status: EStatus.Done},
                     {status: EStatus.Await},
-                    {status: EStatus.Done},
+                    {status: EStatus.Await},
+                    {status: EStatus.Await},
                 ];
 
-                let taskAmount = tmpTaskList.length;
-                // let taskAmount = task.taskList.length;
-                let doneTask = this.countDoneTask();
+                let doneTask = this.countDoneTask(tmpTaskList);
 
-                if(doneTask > taskAmount) {
-                    console.error(`Err: Invalid amount done task (doneTask: ${doneTask}, taskAmount ${taskAmount})`);
-                    break;
-                }                
                 // сколько выполнено в процентах
-                range.current = Math.floor(doneTask * 100 / taskAmount);
-                console.debug(`ProgressBar.calcValue - floor - ${range.current}%`);
+                range.current = Math.floor(doneTask * 100 / tmpTaskList.length);
+                // console.debug(`ProgressBar.calcValue - floor - ${range.current}%`);
                 break;
             default:
                 console.error(`Err: Unknow ProgressBar type - ${type}`);
@@ -116,27 +99,15 @@ class ProgressBar extends Component {
         return range;
     }
 
-    // @Log()
-    countDoneTask = () => {
-        let { task } = this.props;
+    // Подсчитывает количество выполненных задач 
+    // args:
+    //  tasks - список подзадач
+    countDoneTask = (tasks) => {
         let counter = 0;
 
-        let tmpTaskList = [
-            {status: EStatus.Done},
-            {status: EStatus.Await},
-            {status: EStatus.Done},
-            {status: EStatus.Await},
-            {status: EStatus.Done},
-        ];
-
-        tmpTaskList.map((value) => {
+        tasks.map((value) => {
             if(value.status === EStatus.Done) counter++;
         });
-
-        //TODO: Action - getDoneTask
-        // task.taskList.map((value) => {
-        //     if(value.status === EStatus.Done) counter++;
-        // });
 
         return counter;
     }
