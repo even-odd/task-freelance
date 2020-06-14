@@ -1,8 +1,23 @@
 import { createStore } from 'redux';
+import { persistStore, persistReducer } from 'redux-persist'
+import storage from 'redux-persist/lib/storage' // defaults to localStorage for web
 
-import { appRedusers as redusers } from '../redusers/index';
+import { rootReduser } from '../redusers/index';
 
-export const appStore = createStore(redusers);
+const persistConfig = {
+    key: 'root',
+    storage,
+};
+
+const persistedReducer = persistReducer(persistConfig, rootReduser);
+
+export default () => {
+  let store = createStore(persistedReducer)
+  let persistor = persistStore(store)
+  return { store, persistor }
+};
+
+// export default createStore(rootReduser);
 
 // data structure 
 
