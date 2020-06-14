@@ -1,5 +1,5 @@
 // import { createSelector } from 'reselect';
-import { EFilterProp, EFilter, ESorting } from '../consts/enums';
+import { EFilter, ESorting } from '../consts/enums';
 
 // TODO: подробно посмотреть на работу селекторов,
 // возможно, что они не выполняют свою функцию
@@ -188,22 +188,22 @@ import { EFilterProp, EFilter, ESorting } from '../consts/enums';
 //     sortingDone = false;
 //     reverseDone = false;
 // }
-const enter = "-------------"; // debug
 
 // TODO-advanced: сделать Memo
 // const pathChanges = '.testChanges() -';
 // let initialized = false;
 // function initTestChanges(filter) {
-//     let previosFilter = {...filter};
-//     initialized = true;
-//     console.debug(`${pathChanges} initialized`);
-//     return (activeFilter) => {
-
-//     };
-// };
-
-// let testChanges; 
-
+    //     let previosFilter = {...filter};
+    //     initialized = true;
+    //     console.debug(`${pathChanges} initialized`);
+    //     return (activeFilter) => {
+        
+        //     };
+        // };
+        
+        // let testChanges; 
+        
+// const enter = "-------------"; // debug
 export function getTaskList(state) {
     let { tasks, activeFilter } = state;
     // if(!initialized) testChanges = initTestChanges(activeFilter);
@@ -214,24 +214,25 @@ export function getTaskList(state) {
     // switch() {
 
     // }
-    console.debug(`.getTaskList() - tasks before changes: `, tasks);
-    console.debug(enter);
+    // console.debug(`.getTaskList() - tasks before changes: `, tasks);
+    // console.debug(enter);
+    let toPrepareTask = [...tasks];
 
-    let afterFind = doFind(activeFilter.toFind, tasks);
-    console.debug(`.getTaskList() - tasks after Find: `, afterFind);
-    console.debug(enter);
+    let afterFind = doFind(activeFilter.toFind, toPrepareTask);
+    // console.debug(`.getTaskList() - tasks after Find: `, afterFind);
+    // console.debug(enter);
 
     let afterFilter = doFilter(activeFilter.filter, afterFind);
-    console.debug(`.getTaskList() - tasks after Filter: `, afterFilter);
-    console.debug(enter);
+    // console.debug(`.getTaskList() - tasks after Filter: `, afterFilter);
+    // console.debug(enter);
 
     let afterSorting = doSorting(activeFilter.sorting, afterFilter);
-    console.debug(`.getTaskList() - tasks after Sorting: `, afterSorting);
-    console.debug(enter);
+    // console.debug(`.getTaskList() - tasks after Sorting: `, afterSorting);
+    // console.debug(enter);
 
     let afterReverse = doReverse(activeFilter.reverse, afterSorting);
-    console.debug(`.getTaskList() - tasks after Reverse: `, afterReverse);
-    console.debug(enter);
+    // console.debug(`.getTaskList() - tasks after Reverse: `, afterReverse);
+    // console.debug(enter);
 
     return afterReverse;
 }
@@ -258,46 +259,46 @@ function doFind(find, tasks) {
 let pathFilter = '.doFilter() -';
 function doFilter(filter, tasks) {
     let propToFind;
-        let testProp;
-        switch(filter.type) {
-            case EFilter.None: 
-                console.debug(`${pathFilter} filter: None`);
-                return tasks;
-            case EFilter.ByExecutor:
-                console.debug(`${pathFilter} filter: ByExecutors`);
+    let testProp;
+    switch(filter.type) {
+        case EFilter.None: 
+            // console.debug(`${pathFilter} filter: None`);
+            return tasks;
+        case EFilter.ByExecutor:
+            // console.debug(`${pathFilter} filter: ByExecutors, , value: ${filter.value}`);
 
-                propToFind = 'executors'; 
-                testProp = function(taskExecutors) {
-                    for(let executor in taskExecutors) {
-                        if(executor.id === filter.value) return true;
-                    }
-                    return false;
-                };
-                break;
-            case EFilter.ByPriority:
-                console.debug(`${pathFilter} filter: ByPriority`);
+            propToFind = 'executors'; 
+            testProp = function(taskExecutors) {
+                for(let executor in taskExecutors) {
+                    if(executor.id === filter.value) return true;
+                }
+                return false;
+            };
+            break;
+        case EFilter.ByPriority:
+            // console.debug(`${pathFilter} filter: ByPriority, value: ${filter.value}`);
 
-                propToFind = 'priority';
-                testProp = function(taskPriority) {
-                    return taskPriority === filter.value;
-                };
-                break;
-            case EFilter.ByStatus:
-                console.debug(`${pathFilter} filter: ByStatus`);
+            propToFind = 'priority';
+            testProp = function(taskPriority) {
+                return taskPriority === filter.value;
+            };
+            break;
+        case EFilter.ByStatus:
+            // console.debug(`${pathFilter} filter: ByStatus, value: ${filter.value}`);
 
-                propToFind = 'status';
-                testProp = function(taskStatus) {
-                    return taskStatus === filter.value;
-                };
-                break;
-            default: 
-                console.error(`Err: unknow EFilter type (type: ${filter.type})`);
-                return tasks;
-        }
+            propToFind = 'status';
+            testProp = function(taskStatus) {
+                return taskStatus === filter.value;
+            };
+            break;
+        default: 
+            console.error(`${pathFilter} Err: unknow EFilter type (type: ${filter.type})`);
+            return tasks;
+    }
 
-        return tasks.filter((task) => {
-            return testProp(task[propToFind]);
-        });
+    return tasks.filter((task) => {
+        return testProp(task[propToFind]);
+    });
 }
 
 let pathSorting = '.doSorting() -';
@@ -307,10 +308,10 @@ function doSorting(sorting, tasks) {
 
     switch(sorting.type) {
         case ESorting.None:
-            console.debug(`${pathSorting} sorting: None`); 
+            // console.debug(`${pathSorting} sorting: None`); 
             return tasks;
         case ESorting.ByExecutor:
-            console.debug(`${pathSorting} sorting: ByExecutors`);
+            // console.debug(`${pathSorting} sorting: ByExecutors, value: ${sorting.value}`);
 
             propToFind = 'executors';
             //TODO-advanced: переписать, дичь дичайщая вместе с Array.sort 
@@ -324,7 +325,7 @@ function doSorting(sorting, tasks) {
             };
             break;
         case ESorting.ByPriority:
-            console.debug(`${pathSorting} sorting: ByPriority`);
+            // console.debug(`${pathSorting} sorting: ByPriority, value: ${sorting.value}`);
 
             propToFind = 'priority';
             testProp = function(taskPriority) {
@@ -332,7 +333,7 @@ function doSorting(sorting, tasks) {
             };
             break;
         case ESorting.ByStatus:
-            console.debug(`${pathSorting} sorting: ByStatus`);
+            // console.debug(`${pathSorting} sorting: ByStatus, value: ${sorting.value}`);
 
             propToFind = 'status';
             testProp = function(taskStatus) {
@@ -340,7 +341,7 @@ function doSorting(sorting, tasks) {
             };
             break;
         default: 
-            console.error(`Err: unknow ESorting type (type: ${sorting.type})`);
+            console.error(`${pathSorting} Err: unknow ESorting type (type: ${sorting.type})`);
             return tasks;
     }
 
@@ -349,13 +350,28 @@ function doSorting(sorting, tasks) {
     });
 } 
 
-let pathReverse = '.doReverse() -'; 
-function doReverse(reverse, tasks) {
-    console.debug(`${pathReverse} reverse: ${reverse}`);
-    // let tmp = [...tasks];S
-    // console.debug(`${pathReverse} OLD tasks: `, tmp);
-    // console.debug(enter);
+// doc {
+        // let newTasks = [...tasks];
 
-    (reverse) && tasks.reverse();
-    return tasks;
+    // при false - какого-то **ра происходит мутация, но работает  
+        // return (reverse) ? newTasks.reverse() : newTasks;
+
+    // при false - мутируем, но работает
+        // return (reverse) ? newTasks.reverse() : tasks;
+
+    // при true - мутируем, но работает для true
+        // return (reverse) ? tasks.reverse() : newTasks; 
+
+    // так или иначе мутируем, не работает 
+    // так как мутировали, перерендера не произошло 
+        // return (reverse) ? tasks.reverse() : tasks; 
+// }
+
+// let pathReverse = '.doReverse() -'; 
+function doReverse(reverse, tasks) {
+    // console.debug(`${pathReverse} reverse: ${reverse}`);
+
+    // let newTasks = [...tasks];
+    // return (reverse) ? newTasks.reverse() : newTasks;
+    return (reverse) ? tasks.reverse() : tasks;
 }

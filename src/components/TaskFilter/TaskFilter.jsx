@@ -2,19 +2,22 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 
 import { filterTypeActions } from '../../consts/actionTypes';
-import { ESelectType, EFilter, ESorting } from '../../consts/enums';
+import { ESelectType, EFilter, ESorting, EPriority } from '../../consts/enums';
 
 import Select from '../Select/Select';
 class TaskFilter extends Component{
 
     state = {
-        filter: { type: EFilter.ByPriority, value: 0 },
-        sorting: { type: ESorting.ByStatus, value: 0 }
+        filter: { type: EFilter.None, value: EPriority.Wish },
+        sorting: { type: ESorting.None, value: EPriority.Wish }
     };
 
     render() {
         let { activeFilter } = this.props; 
         let { filter, sorting } = this.state;
+
+        let filterValue = this.getValue('filter', filter.type);
+        let sortingValue = this.getValue('sorting', sorting.type);
 
         return (
             <div className="task-filter">
@@ -27,21 +30,22 @@ class TaskFilter extends Component{
                     Filter: 
                     <Select type={ ESelectType.Filter } current={ filter.type }
                             setChange={(type) => this.setProp('filter', 'type', +type)}/>
-                    {/* <Select type={ ESelectType.Filter } current={ filter.value }
-                            setChange={(value) => this.setProp('filter', 'value', +value)}/> */}
+                    <Select type={ filterValue } current={ filter.value }
+                            setChange={(value) => this.setProp('filter', 'value', +value)}/>
                 </div>
                 <div className="task-filter__method task-filter__sorting">
                     Sorting: 
                     <Select type={ ESelectType.Sorting } current={ sorting.type }
                             setChange={(type) => this.setProp('sorting', 'type', +type)}/>
-                    {/* <Select type={ ESelectType.Sorting } current={ sorting.value }
-                            setChange={(value) => this.setProp('sorting', 'value', +value)}/> */}
+                    <Select type={ sortingValue } current={ sorting.value }
+                            setChange={(value) => this.setProp('sorting', 'value', +value)}/>
                 </div>
                
+                {/* TODO: make lighting for Reverse(true/false) */}
                 <button className="task-filter__btn-reverse" 
                         onClick={() => this.dispatchProp('reverse', !activeFilter.reverse)}>
-                    Reverse
-                </button>
+                    Reverse 
+                </button> 
             </div>
         );
     }
@@ -50,16 +54,41 @@ class TaskFilter extends Component{
        this.props.setFilterProp(name, data);
     }
 
-    setProp(method, methodProp, value = 0) {
+    setProp = (method, methodProp, value = 0) => {
         let methodFromState = this.state[method];
         this.dispatchProp(method, {...methodFromState, [methodProp]: value});
 
         this.setState({
-            [method]: {
-                [methodProp]: value
-            }
+            [method]: { ...methodFromState, [methodProp]: value }
         });
     }    
+
+    getValue = (method, type) => {
+        let locEnum;
+        switch(method) {
+            case 'filter':
+                locEnum = EFilter;
+                break;
+            case 'sorting':
+                locEnum = ESorting;
+                break;
+            default: // хз, как правильно обработать
+                throw new Error(`TaskFilter.getValue: unknow method:`, method);
+        }
+
+        switch(type) {
+            case locEnum.None:
+                return ESelectType.None;
+            case locEnum.ByExecutor:
+                return ESelectType.Executor;
+            case locEnum.ByPriority:
+                return ESelectType.Priority;
+            case locEnum.ByStatus:
+                return ESelectType.Status;
+            default:
+                console.error(`TaskFilter.getValue: unknow ${method} type`);
+        }
+    }
 }
 
 const mapStateToProps = (state) => {
