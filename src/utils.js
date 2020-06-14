@@ -212,3 +212,20 @@ export function validateTime(time) {
 
     return validated;
 }
+
+export function getUpdatedTaskList(oldList, changedTask) {
+    let found = false;
+    let newList = oldList.map(task => {
+        if(task.id === changedTask.id) {
+            found = true;
+            let editedTask = {...task, ...changedTask};
+            return editedTask;
+        }
+        return task;
+    });
+    
+    (found) 
+    ? console.debug('task.reduser - EDITED: ', newList)
+    : console.debug('task.reduser - ADDED: ', [...oldList, changedTask]);
+    return (found) ? newList : [...oldList, changedTask];
+}
