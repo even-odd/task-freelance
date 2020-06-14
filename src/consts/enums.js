@@ -23,19 +23,20 @@ export const propsPriority = toProps(Object.keys(EPriority));
 export const ESorting = {
     None: 0,
     ByPriority: 1,
-    ByExecutor: 2,
-    ByStatus: 3
+    ByExecutor: 2, // TODO-advanced 
+    ByStatus: 3,
+    ByUnSavedTask: 4 // TODO-advanced 
 };
-export const propsSorting = toProps(['by priority', 'by executor', 'by status'], 1)
+export const propsSorting = toProps(['none', 'by priority', 'by executor', 'by status']);
 
 export const EFilter = {
     None: 0,
     ByPriority: 1,
-    ByExecutor: 2,
+    ByExecutor: 2, // TODO-advanced 
     ByStatus: 3,
     ByUnSavedTask: 4 // TODO-advanced 
 };
-export const propsFilter = toProps(['by priority', 'by executor', 'by status'], 1)
+export const propsFilter = toProps(['none', 'by priority', 'by executor', 'by status']);
 
 // используется только для доступа (что бы не переписывать при изменениях)
 export const EFilterProp = {
@@ -65,10 +66,12 @@ export const EToRender = {
 };
 
 export const ESelectType = {
-    Status: 0,
-    Priority: 1,
-    Filter: 2,
-    Sorting: 3
+    None: 0,
+    Status: 1,
+    Priority: 2,
+    Filter: 3,
+    Sorting: 4,
+    Executor: 5
 };
 export const propsSelect = toProps(Object.keys(ESelectType));
 
