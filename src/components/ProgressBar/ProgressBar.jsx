@@ -1,6 +1,6 @@
 import React, { PureComponent } from "react";
 
-import { EProgressBar, EStatus } from "../../consts/enums";
+import { EProgressBar } from "../../consts/enums";
 
 import { getDays } from '../../utils';
 
@@ -11,10 +11,37 @@ import { getDays } from '../../utils';
 //  type - тип ProgressBar
 //  task - задача 
 class ProgressBar extends PureComponent {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            value: calcValue(props) 
+        };
+    }
+    
+    static getDerivedStateFromProps(nextProps, prevState) {
+        let newState = null;
+        
+        if(nextProps.type === EProgressBar.CompletedTasks) {
+            let doneTasks = countDoneTask(nextProps.task.taskList);
+            if(doneTasks !== prevState.value ) 
+                newState = {
+                    value: doneTasks
+                };
+        }
+        if(nextProps.type === EProgressBar.TimeLimit) {
+            let today = new Date().getDate();
+            if(today !== prevState.value) 
+                newState = {
+                    value: today
+                };
+        }
+
+        return newState;
+    }
 
     render() {
         let { type } = this.props;
-        
         // TODO-ask: как думаешь, лучше это делать здесь или 
         // в constructor и componentDidUpdate
         // с помощью shouldComponentUpdate можно проверить
@@ -46,51 +73,39 @@ class ProgressBar extends PureComponent {
             end: 100, 
         }
 
-        if (task === undefined) {
-            console.error(`Err: ProgressBar.calcValue - task does'n exist`);
+        if (!task) {
+            console.error(`Err: ProgressBar.calcProgressValue - task does'n exist`);
             return 0;
         }
 
         switch(type) {
-            // TODO: получилось запутанно, переделать
+            // TODO-advanced: получилось запутанно, переделать
             case EProgressBar.TimeLimit:
-                let timeLimit = getDays(task.timeEnd - task.timeBegin);
-                // времени осталось
-                let timeLeft = timeLimit - (timeLimit - getDays(task.timeEnd - Date.now()));
+                let { timeBegin, timeEnd } = task;
+                let timeLimit = getDays(timeEnd - timeBegin);
+                let timeLeft = timeLimit - (timeLimit - getDays(timeEnd - Date.now())); // времени осталось
                 
-                // console.debug(`ProgressBar.calcValue (timeBegin: ${task.timeBegin}, timeEnd: ${task.timeEnd})`);
-                // console.debug(`ProgressBar.calcValue (timeLimit: ${timeLimit}, timeLeft: ${timeLeft})`);
-                
-                // время вышло
-                if (timeLeft < 0) {
-                    console.debug('ProgressBar.calcValue - time out - 100');
+                if (timeLeft < 0) { // время вышло
+                    console.debug('ProgressBar.calcProgressValue - time out - 100');
                     range.current = 100;
                     break;
                 }
-                // дата начала задачи еще не наступила 
-                if (timeLeft > timeLimit) {
-                    console.debug('ProgressBar.calcValue - early date - 0');
+                
+                if (timeLeft > timeLimit) { // дата начала задачи еще не наступила 
+                    console.debug('ProgressBar.calcProgressValue - early date - 0');
                     break;
                 } 
 
                 // сколько времени прошло в процентах
                 range.current = Math.floor((timeLimit - timeLeft) * 100 / timeLimit);
-                // console.debug(`ProgressBar.calcValue - floor - ${range.current}%`);
                 break;
             case EProgressBar.CompletedTasks:
-                let tmpTaskList = [
-                    {status: EStatus.Done},
-                    {status: EStatus.Await},
-                    {status: EStatus.Await},
-                    {status: EStatus.Await},
-                    {status: EStatus.Await},
-                ];
-
-                let doneTask = this.countDoneTask(tmpTaskList);
+                // защита от Infinity
+                if(task.taskList.length <= 0) break;
+                let doneTask = this.state.value;
 
                 // сколько выполнено в процентах
-                range.current = Math.floor(doneTask * 100 / tmpTaskList.length);
-                // console.debug(`ProgressBar.calcValue - floor - ${range.current}%`);
+                range.current = Math.floor(doneTask * 100 / task.taskList.length);
                 break;
             default:
                 console.error(`Err: Unknow ProgressBar type - ${type}`);
@@ -98,20 +113,37 @@ class ProgressBar extends PureComponent {
 
         return range;
     }
-
-    // Подсчитывает количество выполненных задач 
-    // args:
-    //  tasks - список подзадач
-    countDoneTask = (tasks) => {
-        let counter = 0;
-
-        tasks.map((value) => {
-            if(value.status === EStatus.Done) counter++;
-        });
-
-        return counter;
-    }
-
 } 
 
+// Вычисляет значение для getDerivedStateFromProps (для сравнения с новыми пропсами)
+const calcValue = (props) => {
+    let { task, type } = props;
+    let value;
+
+    switch(type) {
+        case EProgressBar.TimeLimit:
+            value = new Date().getDate();
+            break;
+        case EProgressBar.CompletedTasks:
+            value = countDoneTask(task.taskList);
+            break;
+        default:
+            console.error(`Err: Unknow ProgressBar type - ${type}`);
+    }
+
+    return value;
+}
+
+// Подсчитывает количество выполненных задач 
+// args:
+//  tasks - список подзадач
+const countDoneTask = (tasks) => {
+    let counter = 0;
+
+    tasks.map((task) => {
+        task.status && counter++;
+    });
+
+    return counter;
+}
 export default ProgressBar;
