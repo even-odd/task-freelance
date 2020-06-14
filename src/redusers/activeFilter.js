@@ -1,15 +1,6 @@
-import { EFilter, ESorting, EFilterProp, EPriority, EStatus } from '../consts/enums';
 import { filterTypeActions } from '../consts/actionTypes';
 
-//TODO-advanced: рассмотреть вариант  
-const {Filter, Sorting, Reverse, ToFind} = EFilterProp; // интересная задумка 
-
-export const initialFilterState = {
-    [ToFind]: '',
-    [Filter]: {type: EFilter.None, value: EPriority.Wish},  
-    [Sorting]: {type: ESorting.None, value: EStatus.Await},
-    [Reverse]: false
-};
+export const initialFilterState = {};
 
 export const activeFilter = (state = initialFilterState, action) => {
     switch(action.type) {
