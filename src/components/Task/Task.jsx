@@ -1,16 +1,13 @@
-import React, { PureComponent } from "react";
-// import { bindActionCreators } from 'redux';
+import React, { Component } from "react";
 import { connect } from 'react-redux';
 
 import './Task.css';
 import doge from '../../assets/doge.png';
 import { getProperty, getTenDays, numberTest, getStrDate, prepareChangedProp } from '../../utils';
-import { EProgressBar, EPriority, EStatus, ETaskType, ESelectType } from "../../consts/enums";
+import { EProgressBar, EPriority, EStatus, ESelectType } from "../../consts/enums";
 import { taskTypeActions } from "../../consts/actionTypes";
-// import taskActions from '../../actions/taskActions';
 
 import Select from '../Select/Select';
-import PersonSlider from '../Person/PersonSlider/PersonSlider';
 import ProgressBar from "../ProgressBar/ProgressBar";
 
 //TODO-advanced: придумать механизм умной отправки на сервер 
@@ -24,10 +21,10 @@ import ProgressBar from "../ProgressBar/ProgressBar";
 //  task
 //  taskId? - свободный Id для создания новой задачи 
 //  moveTask - по факту костыль - не знаю как сообщить родителю о сохраннении задачи
-class Task extends PureComponent {
+class Task extends Component {
     constructor(props) {
         super(props);
-        // console.debug('Task: ActionsForTask - ', props.actions);
+        // console.debug('Task.constructor - rawTask', props.task);
         this.state = {
             task: (props.task) ? props.task : this.сreateNewTask(),
             saved: (props.task) ? true : false,
@@ -35,9 +32,27 @@ class Task extends PureComponent {
         }
     }
 
+    // Notice: может перебивать значения из constructor после инициализации
+    // Используется для применения изменений с Advanced и Simple task
+    // Особенно важен task.taskList для ProgressBar
+    static getDerivedStateFromProps(nextProps, prevState) {
+        console.debug('Task.getDerivedStateFromProps');
+        let newState = prevState;
+
+        //TODO-advanced: каждый раз, при изменении перезаписывает 
+        if(nextProps.task && prevState.saved) 
+            newState = {
+                ...prevState,
+                task: prepareTask(nextProps.task)
+            };
+        
+        return newState;
+    }
+
     render() {
         let { task, saved } = this.state; 
         // console.debug(`Task - `, task);
+        
         let priority = getProperty('priority', task.priority,
             ['wish', 'low', 'medium', 'important', 'crit']
         );
@@ -46,7 +61,7 @@ class Task extends PureComponent {
         );
 
         return (
-            <div className='task' onClick={ () => this.openAdvancedTask(task.id) }>
+            <div className='task' onDoubleClick={ () => saved && this.props.openAdvancedTask() }>
                 <div className='task__info'>
                     <div className="task__box">
                         <div className='task__props'>
@@ -104,31 +119,15 @@ class Task extends PureComponent {
                                     title="Мое увооожение, снимаю перед вами 🎩"/>
                         }
                     </div>
-                    
                 </div>
-
-                {/* TODO-advanced: Change Executors */}
-                <div className="task__executors">
-                    {/*  
-                    { (!saved) 
-                        ? <PersonSlider persons={ task.executors }/>
-                        : <Person/> 
-                     */}
-                    
-                </div>               
             </div>
         )
-    }
-    //TODO: Task.openAdvancedTask 
-    openAdvancedTask = (id) => {
-
     }
 
     // Сохраняет задачу и сообщает родителю
     handleSaveTask = () => {
-        // console.debug('Task.handleSaveTask - begin');
         let { saveTask, moveTask } = this.props;
-        let { errors } = this.state;
+        let { errors, task } = this.state;
     
         // TODO-advanced: вынести в отдельный метод (вывод ошибок), хз почему сразу не сделал 
         let handledErr = 0;
@@ -151,8 +150,8 @@ class Task extends PureComponent {
 
         moveTask && moveTask();           
 
-        saveTask(this.state.task);
-        // console.debug('Task.handleSaveTask - end');
+        saveTask(task);
+        console.info(`task saved, id: ${task.id}`);
     }
 
     // Удаляет задачу и сообщает родителю
@@ -172,14 +171,16 @@ class Task extends PureComponent {
         // console.debug('Task.createNewTask');
         numberTest('taskId', this.props.taskId, 'Task.сreateNewTask', true);
         return {
-            id: this.props.taskId, // поле необходимо для связи задачи с SimpleTask и AdvancedTask
-            taskType: ETaskType.Full,
+            id: this.props.taskId,
+            // type: ETaskType.Full,
             title: 'Write your task title here....',
             status: EStatus.Await,
             priority: EPriority.Wish,
             executors: [],
             timeBegin: new Date(),
-            timeEnd: new Date(getTenDays(Date.now())) // будет немного больше чем 10 дней (задержка при выполении + 10 дней от текущего времени)
+            timeEnd: new Date(getTenDays(Date.now())), // будет немного больше чем 10 дней (задержка при выполении + 10 дней от текущего времени)
+            description: '',
+            taskList: []
         };
     }
 
@@ -188,6 +189,7 @@ class Task extends PureComponent {
         let newValue = prepareChangedProp(prop, rawValue);
 
         if(newValue.err) {
+            // newValue.value - сообщение об ошибке
             alert(newValue.value);
             this.setState((prevState) => {
                 return {
@@ -195,29 +197,40 @@ class Task extends PureComponent {
                 }
             }); 
         } else {
+            // newValue.value - значение свойства
             this.setState((prevState) => {
                 return {
-                    task: function() {
-                        let editedTask = {...prevState.task, [prop]: newValue.value};
-                        console.debug('\n', 'TASK: Почему 2 раза рендер?');
-                        console.debug('Task.changeProp editedTask:', editedTask);
-                        return editedTask;
-                    }()    
+                    task: {...prevState.task, [prop]: newValue.value}   
                 }
             });
         }
     }
 
     // Тогглер для переключения в режим редактирования    
-    handleEdit = () => {
+    handleEdit = (event) => {
         this.setState({
             saved: false
         });
+        event.stopPropagation()
     }
-    
 }
 
-// const mapDispatchToProps = (dispatch) => bindActionCreators(taskActions, dispatch);
+// Обрабатывает задачу из хранилища
+const prepareTask = (rawTask) => {
+    if(!rawTask.timeBegin.getDate || !rawTask.timeEnd.getDate) {
+        
+        let updatedTask = {
+            ...rawTask,
+            timeBegin: new Date(rawTask.timeBegin),
+            timeEnd: new Date(rawTask.timeEnd)
+        };
+        console.debug('Task.prepareTask - persisted task, updated: ', updatedTask);
+        return updatedTask;
+    }
+    console.debug('Task.prepareTask - ok');
+    return rawTask;
+}
+
 const mapDispatchToProps = (dispatch) => {
     return {
         saveTask: (task) => {
