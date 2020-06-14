@@ -3,13 +3,21 @@ import React from "react";
 // props: 
 //  person 
 
+const DEFAULT_PERSON = {
+    name: 'Name',
+    secondName: 'SecondName',
+    icon: ''
+}
+
 function Person (props) {
     let { person } = props;
-    let fullName = person.name + person.secondName;
+    person = (person) ? person : DEFAULT_PERSON;
+
+    let fullName = `${person.name} ${person.secondName}`;
     return (
         <div className='executor'>
             {/* <a href={}> */}
-                <img className="person__icon" src={ person.icon }/>
+                <img className="person__icon" src={ person.icon } alt='Person icon'/>
                 <span className="person__name">{ fullName }</span> 
             {/* </a> */}
         </div>
