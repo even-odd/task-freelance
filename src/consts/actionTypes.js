@@ -9,7 +9,3 @@ export const filterTypeActions = {
     SET_FILTER_PROP: 30
 };
 
-export const otherTypeActions = {
-    TO_RENDER: 50
-};
-
