@@ -21,7 +21,7 @@ class AdvancedTask extends Component {
                 // немного убого, но лишь немного
                 description: (props.task.description.length > 1) 
                     ? props.task.description 
-                    : 'Write here your description...',
+                    : 'Напишите здесь свое описание...',
                 taskList: props.task.taskList
             },
             saved: true
@@ -38,7 +38,7 @@ class AdvancedTask extends Component {
                 title: nextProps.task.title,
                 description: (nextProps.task.description.length > 1) 
                     ? nextProps.task.description 
-                    : 'Write here your description...',
+                    : 'Напишите здесь свое описание...',
                 taskList: nextProps.task.taskList
             },
             saved: true
@@ -59,7 +59,7 @@ class AdvancedTask extends Component {
                     </div>
                     { !saved &&
                     <button className="ad-task__btn-save" onClick={ this.saveChanges }>
-                        Save changes
+                        Сохранить изменения
                     </button>
                     }
                 </div>
@@ -81,7 +81,7 @@ class AdvancedTask extends Component {
                                     deleteTask={() => this.delSimpleTask(simpleTask.id) }/>
                     )
                 }
-                    <button onClick={ this.addNewSimpleTask }>
+                    <button className='ad-task__btn-add-simple' onClick={ this.addNewSimpleTask }>
                         <span role='img' aria-label='add simple task'>➕</span>
                     </button>
                 </div>

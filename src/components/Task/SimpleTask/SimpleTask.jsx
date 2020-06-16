@@ -24,18 +24,20 @@ class SimpleTask extends Component {
         let { smTask, saved } = this.state; 
         return (
            <div className='sl-task'>
-                <input type="checkbox" 
-                    defaultChecked={smTask.status} onClick={() => this.changeProp('status', !smTask.status)}/>
+                <div className="sl-task__box">
+                    <input type="checkbox" 
+                        defaultChecked={smTask.status} onClick={() => this.changeProp('status', !smTask.status)}/>
 
-                { (saved) 
-                    ? <div className="sl-task__title" onDoubleClick={ this.handleEdit }>
-                        { smTask.title }
-                    </div>
-                    : <input type='text' defaultValue={ smTask.title }
-                             className='sl-task_input-title' 
-                             onBlur={(e) => this.changeProp('title', e.target.value)}/>
-                }
-                <button onClick={ this.props.deleteTask }>X</button>
+                    { (saved) 
+                        ? <div className="sl-task__title" onDoubleClick={ this.handleEdit }>
+                            { smTask.title }
+                        </div>
+                        : <input type='text' defaultValue={ smTask.title }
+                                className='sl-task_input-title' 
+                                onBlur={(e) => this.changeProp('title', e.target.value)}/>
+                    }
+                </div>
+                <button className='sl-task__btn-del' onClick={ this.props.deleteTask }>X</button>
            </div>
         );
     }
@@ -47,7 +49,7 @@ class SimpleTask extends Component {
         numberTest('newId', newId, 'SimpleTask.createNewTask', true);
         let newTask = {
             id: newId,
-            title: 'Write you task title here...',
+            title: 'Подзадача...',
             status: false, // TODO-advanced: сделать нормальные статусы с изменением
         };
 

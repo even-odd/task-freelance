@@ -50,8 +50,8 @@ class ProgressBar extends PureComponent {
         let range = this.calcProgressValue();
 
         let title = 'default title for progress bar';
-        if (type === EProgressBar.TimeLimit) title = 'time limit'; 
-        if (type === EProgressBar.CompletedTasks) title = 'completed task';
+        if (type === EProgressBar.TimeLimit) title = 'срок выполнения'; 
+        if (type === EProgressBar.CompletedTasks) title = 'состояние задачи';
 
         return (
             <div className="progress-bar">

@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 
+import './TaskFilter.css';
 import { filterTypeActions } from '../../consts/actionTypes';
 import { ESelectType, EFilter, ESorting, EPriority } from '../../consts/enums';
 
@@ -22,19 +23,22 @@ class TaskFilter extends Component{
         return (
             <div className="task-filter">
                 <div className="task-filter__method task-filter__find">
-                    Find: 
+                    <br/>
+                    <span className='task-filter__method-title'>Поиск:</span>
                     <input type="text" defaultValue={ activeFilter.find } 
                            onBlur={(e) => this.dispatchProp('toFind', e.target.value)}/>
                 </div>
                 <div className="task-filter__method task-filter__filter">
-                    Filter: 
+                    <span className='task-filter__method-title'>Фильтрация:</span>
+                    <br/>
                     <Select type={ ESelectType.Filter } current={ filter.type }
                             setChange={(type) => this.setProp('filter', 'type', +type)}/>
                     <Select type={ filterValue } current={ filter.value }
                             setChange={(value) => this.setProp('filter', 'value', +value)}/>
                 </div>
                 <div className="task-filter__method task-filter__sorting">
-                    Sorting: 
+                    <span className='task-filter__method-title'>Сортировка:</span>
+                    <br/>
                     <Select type={ ESelectType.Sorting } current={ sorting.type }
                             setChange={(type) => this.setProp('sorting', 'type', +type)}/>
                     <Select type={ sortingValue } current={ sorting.value }
@@ -42,9 +46,9 @@ class TaskFilter extends Component{
                 </div>
                
                 {/* TODO: make lighting for Reverse(true/false) */}
-                <button className="task-filter__btn-reverse" 
+                <button className={`task-filter__method task-filter__reverse ${activeFilter.reverse}`} 
                         onClick={() => this.dispatchProp('reverse', !activeFilter.reverse)}>
-                    Reverse 
+                    Переворот
                 </button> 
             </div>
         );

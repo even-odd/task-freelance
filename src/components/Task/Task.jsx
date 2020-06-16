@@ -54,10 +54,10 @@ class Task extends Component {
         // console.debug(`Task - `, task);
         
         let priority = getProperty('priority', task.priority,
-            ['wish', 'low', 'medium', 'important', 'crit']
+            ['хотелка', 'минимальная', 'средняя', 'важная', 'критическая'], ['wish', 'low', 'medium', 'important', 'crit']
         );
         let status = getProperty('status', task.status,
-            ['done', 'await', 'delaye', 'during']
+            ['выполнена', 'ожидает', 'отложена', 'в процессе'], ['done', 'await', 'delayed', 'during']
         );
 
         return (
@@ -87,9 +87,9 @@ class Task extends Component {
                         
                         <div className="task__btn-box">
                         { !saved &&
-                            <button className='task__btn-save' onClick={ this.handleSaveTask }>Save Task</button>
+                            <button className='task__btn-save' onClick={ this.handleSaveTask }>Сохранить</button>
                         }
-                            <button className='task__btn-del' onClick={ this.deleteTask }>Delete Task</button>
+                            <button className='task__btn-del' onClick={ this.deleteTask }>Удалить</button>
                         </div>
                     </div>
 
@@ -173,7 +173,7 @@ class Task extends Component {
         return {
             id: this.props.taskId,
             // type: ETaskType.Full,
-            title: 'Write your task title here....',
+            title: 'Название вашей задачи...',
             status: EStatus.Await,
             priority: EPriority.Wish,
             executors: [],

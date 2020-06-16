@@ -6,10 +6,10 @@ export const EProgressBar = {
 export const EStatus = {
     Done: 0,
     Await: 1,
-    Delaye: 2,
+    Delayed: 2,
     During: 3
 };
-export const propsStatus = toProps(Object.keys(EStatus));
+export const propsStatus = toProps(['выполнена', 'ожидает', 'отложена', 'в процессе']);
 
 export const EPriority = {
     Wish: 0,  // хотелка
@@ -18,7 +18,7 @@ export const EPriority = {
     Important: 3,
     Critical: 4   
 };
-export const propsPriority = toProps(Object.keys(EPriority));
+export const propsPriority = toProps(['хотелка', 'минимальная', 'средняя', 'важная', 'критическая']);
 
 export const ESorting = {
     None: 0,
@@ -27,7 +27,7 @@ export const ESorting = {
     ByStatus: 3,
     ByUnSavedTask: 4 // TODO-advanced 
 };
-export const propsSorting = toProps(['none', 'by priority', 'by executor', 'by status']);
+export const propsSorting = toProps(['без сортировки', 'по приоритету', 'по исполнителю', 'по статусу']);
 
 export const EFilter = {
     None: 0,
@@ -36,7 +36,7 @@ export const EFilter = {
     ByStatus: 3,
     ByUnSavedTask: 4 // TODO-advanced 
 };
-export const propsFilter = toProps(['none', 'by priority', 'by executor', 'by status']);
+export const propsFilter = toProps(['без фильтрации', 'по приоритету', 'по исполнителю', 'по статусу']);
 
 // используется только для доступа (что бы не переписывать при изменениях)
 export const EFilterProp = {
