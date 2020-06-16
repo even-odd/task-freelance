@@ -1,6 +1,7 @@
 .task {
-    display: flex;
+    /* display: flex; */
     min-width: 278px;
+    max-width: 100%;
     margin: 10px 0;
     padding: 8px 12px;
     border: 2px solid black;
@@ -9,7 +10,6 @@
 }
 
 .task__info {
-    width: 70%;
     padding-right: 5px;
     border-right: 2px dashed black;
 }
@@ -55,7 +55,7 @@
     background-color: bisque;
 }
 
-.task__status-delaye {
+.task__status-delayed {
     background-color: #d46400;
 }
 
@@ -77,6 +77,7 @@
     font-size: 24px;
     font-weight: bold;
     word-break: break-word;
+    user-select: text;
 }
 .task__title::before {
     content: '#';
@@ -93,6 +94,8 @@
     width: 40px;
 }
 
+
+/* Unused */
 .task__executors {
     display: flex;
     /* min-width: 15%; */

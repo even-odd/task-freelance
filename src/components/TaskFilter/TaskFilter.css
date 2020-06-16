@@ -1,0 +1,49 @@
+.task-filter {
+    display: flex;
+    min-width: 500px;
+    max-width: 950px;
+    margin: 10px auto 20px auto;
+    justify-content: center;
+}
+
+.task-filter__method {
+    margin: 0 10px;
+    padding: 0 0 5px 0;
+    border-bottom: 2px solid black;
+}
+
+.task-filter__method-title {
+    margin-right: 8px;
+}
+
+
+.task-filter__find {
+
+}
+
+.task-filter__filter {
+
+}
+
+.task-filter__sorting {
+
+}
+
+.task-filter__reverse {
+    padding: 0;
+    border: 1px solid black;
+    border-radius: 10%;
+    background: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.task-filter__reverse.true {
+    background: black;
+    color: white;
+}
+
+.task-filter__reverse.false {
+    background: white;
+    color: black;
+}

@@ -1,6 +1,6 @@
 .task-list__box {
     display: flex;
-    min-width: 331px;
+    min-width: 532px;
     max-width: 1000px;
     min-height: 95vh;
     margin: 0 auto;
@@ -8,8 +8,8 @@
 
 .task-list__addTask {
     flex: 1;
-    min-width: 30px;
-    max-width: 50px;
+    min-width: 29px;
+    max-width: 49px;
     border-right: 2px dashed black;
 }
 
@@ -22,9 +22,15 @@
 }
 
 .task-list {
-    flex: 2;
-    min-width: 299px;
-    max-width: 949px;
+    flex: 4;
+    min-width: 300px;
+    max-width: 680px;
     padding: 10px;
-    border-right: 2px dashed black;
+    border-right: 2px dashed rgb(194, 122, 14);
+}
+
+.advanced-box {
+    flex: 2;
+    min-width: 200px;
+    max-width: 370px;
 }

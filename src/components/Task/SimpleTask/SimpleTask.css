@@ -1,0 +1,27 @@
+.sl-task {
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 10px 10px 0;
+}
+
+.sl-task__box {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    font-size: 18px; 
+}
+
+.sl-task__title {
+    width: 90%;
+    align-self: center;
+    word-break: break-word;
+    user-select: text;
+}
+
+.sl-task_input-title {
+    width: 90%;
+}
+
+.sl-task__btn-del {
+    width: 30px;
+}

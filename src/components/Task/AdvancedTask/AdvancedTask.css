@@ -1,0 +1,49 @@
+.ad-task {
+    display: block;
+    position: sticky;
+    top: 5px;
+    user-select: text;
+}
+
+.ad-task__title {
+    padding: 5px 0;
+    border-bottom: 3px solid rgb(202, 226, 43);
+    margin: 5px 0;
+    font-size: 24px;
+    font-weight: bold;
+    word-break: break-word;
+    user-select: text;
+}
+
+.ad-task__btn-save {
+    margin: 0 0 0 2px;
+}
+
+.ad-task__description {
+    width: 90%;
+    margin: 10px 0 20px 2px;
+}
+
+.ad-task__description textarea {
+    width: 100%;
+    min-height: 50px;
+}
+
+.ad-task__task-list {
+    width: 100%;
+    margin: 0 0 0 2px;
+}
+
+.ad-task__btn-add-simple {
+    display: block;
+    width: 15%;
+    background: none;
+    border: 2px dashed black;
+    border-left: 2px dashed transparent;
+    border-right: 2px dashed transparent;
+    transition: 0.2s;
+}
+
+.ad-task__btn-add-simple:hover {
+    border: 2px dashed black;
+}
